@@ -2,7 +2,8 @@
   "name": "purescript-ace",
   "license": "MIT",
   "authors": [
-    "John A. De Goes <john@degoes.net> (http://degoes.net)"
+    "John A. De Goes <john@degoes.net> (http://degoes.net)",
+    "Isaac Shapira <fresheyeball@gmail.com>"
   ],
   "ignore": [
     "**/.*",
@@ -17,8 +18,13 @@
     "package.json"
   ],
   "dependencies": {
-    "ace": "~1.1.8"
+    "ace": "git@github.com:ajaxorg/ace-builds.git#a4e495d8901876c6bafe3870a35cb8e32c827e97",
+    "purescript-oo-ffi": "~0.0.5",
+    "purescript-dom": "~0.1.1",
+    "purescript-transformers": "~0.4.0"
   },
   "devDependencies": {
+    "purescript-mocha": "~0.0.3",
+    "purescript-chai": "~0.0.3"
   }
 }
