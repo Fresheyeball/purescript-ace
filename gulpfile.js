@@ -5,10 +5,16 @@ var gulp        = require('gulp')
   , run         = require('gulp-run')
   , runSequence = require('run-sequence')
   , jsValidate  = require('gulp-jsvalidate')
+  , gulpConcat  = require('gulp-concat')
+  , addSrc      = require('gulp-add-src')
+  , karma       = require('gulp-karma')
   ;
 
 var paths = {
     src: 'src/**/*.purs',
+    jsDeps : [
+      'bower_components/ace/src/ace.js'
+    ],
     bowerSrc: [
       'bower_components/purescript-*/src/**/*.purs',
       'bower_components/purescript-*/src/**/*.purs.hs'
@@ -28,8 +34,7 @@ var paths = {
 
 var options = {
     test: {
-        main: 'Test.Main',
-        output: 'output/test.js'
+        main: 'Test.Main'
     }
 };
 
@@ -74,10 +79,21 @@ gulp.task('make', function() {
         .pipe(gulp.dest(paths.dest))
 });
 
-gulp.task('test', function() {
+gulp.task('build:test', function() {
     return compile(purescript.psc, [paths.src, paths.test].concat(paths.bowerSrc), options.test)
-        .pipe(run('node').exec());
+        .pipe(addSrc(paths.jsDeps))
+        .pipe(gulpConcat("test.js"))
+        .pipe(gulp.dest("tmp"));
 });
+
+gulp.task('run:test', function(){
+    return gulp.src("tmp/test.js").pipe(karma({
+      configFile : "./karma.conf.js",
+      action     : "run"
+    }));
+});
+
+gulp.task('test', runSequence("build:test", "run:test"));
 
 gulp.task('docs', docs('all'));
 
